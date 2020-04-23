@@ -209,6 +209,25 @@ async function updateHealth(fighterID, health)
             {
                 if(gameInfo.fighter4.active)
                 {
+                    if(gameInfo.fighter1.alive === false && gameInfo.fighter2.alive === false && gameInfo.fighter3.alive === false && gameInfo.fighter4.alive === false)
+                    {
+                        endGame();
+                        statusMesssage(`${gameInfo.boss.name} wins!`);
+                    }
+                }
+                else
+                {
+                    if(gameInfo.fighter1.alive === false && gameInfo.fighter2.alive === false && gameInfo.fighter3.alive === false)
+                    {
+                        endGame();
+                        statusMesssage(`${gameInfo.boss.name} wins!`);
+                    }
+                }
+            }
+            else
+            {
+                if(gameInfo.fighter1.alive === false && gameInfo.fighter2.alive === false)
+                {
                     endGame();
                     statusMesssage(`${gameInfo.boss.name} wins!`);
                 }
