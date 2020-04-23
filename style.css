@@ -1,0 +1,136 @@
+body{
+    overflow: hidden;
+    background-image: url('back-test.jpg');
+    background-position:center;
+}
+
+.bossBox{
+    margin: 0;
+    position: absolute;
+    top: 40%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+    height: 350px;
+    width: 300px;
+    /* background-color:orange; */
+}
+
+.boss{
+    margin-left: 75px;
+    width: 150px;
+    height: 150px;
+    /* background-color:green; */
+    background-image: url('goteem.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.statusMessage
+{
+    font-size:14px;
+    font-weight: bold;
+    text-align: center;
+    overflow: visible;
+    /* background-color:darkblue; */
+    color:white;
+}
+
+.fighters
+{
+    padding-left:4%;
+    padding-top:10px;
+    height: 150px;
+    width: 300px;
+    /* background-color:red; */
+    font-size: 12px;
+    text-align: center;
+    color:white;
+}
+
+.fighter1{
+    float:left;
+    padding: 5px;
+    width:24%;
+    /* background-color:green; */
+    overflow: hidden;
+    visibility: hidden;    
+}
+
+.fighterImage{
+    /* background-color:blue; */
+    background-image: url('knight-orange.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height:55px;
+    width:55px;
+    margin:2px;
+    text-align:center;
+}
+
+.fighterItem{
+    /* margin-top:5px; */
+    margin-left: 40%;
+    height:15px;
+    width:15px;
+    /* background-color:blue; */
+    background-image: url('chest.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    visibility: hidden;
+}
+
+.fighter2{
+    float:left;
+    padding: 5px;
+    width:24%;
+    /* background-color:orange; */
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.fighter3{
+    float:left;
+    padding: 5px;
+    width:24%;
+    /* background-color:purple; */
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.fighter4{
+    float:left;
+    padding: 5px;
+    width:24%;
+    /* background-color:grey; */
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.topRow1{
+    float:left;
+    position:fixed;
+    /* background-color:red; */
+    height:360px;
+    width:640px;
+    overflow: hidden;
+}
+.topRow2{
+    float:left;
+    position:fixed;
+    left:640px;
+    /* background-color:green; */
+    height:360px;
+    width:640px;
+    overflow: hidden;
+}
+.topRow3{
+    float:left;
+    position:fixed;
+    left:1280px;
+    /* background-color:blue; */
+    height:360px;
+    width:640px;
+    overflow: hidden;
+}
