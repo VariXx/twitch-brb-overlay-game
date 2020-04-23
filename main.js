@@ -421,15 +421,15 @@ async function processChat(channel, user, message, self)
     {
         await useItem(user);
     }
-    if(message.toLowerCase() == 'a')
-    { 
-        // test command
-        gameInfo.fighter1.item = true;
-        gameInfo.fighter1.itemTick = 0;
-        statusMesssage(`${gameInfo.fighter1.name} found an !item`);
-        itemIcon(1, true);
-        await sleep(1);
-    }
+    // if(message.toLowerCase() == 'a') // COMMENT THIS OUT BEFORE COMMIT
+    // { 
+    //     // test command
+    //     gameInfo.fighter1.item = true;
+    //     gameInfo.fighter1.itemTick = 0;
+    //     statusMesssage(`${gameInfo.fighter1.name} found an !item`);
+    //     itemIcon(1, true);
+    //     await sleep(1);
+    // }
 
 }
 
