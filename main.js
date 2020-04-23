@@ -19,10 +19,10 @@ fighter2: {active: false, alive: false, name: 'nobody', health: 0, item: false, 
 fighter3: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: 'knight-orange.png', animation: undefined},
 fighter4: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: 'knight-orange.png', animation: undefined}};
 
-let bossHitSound = new Audio('../sounds/bossHit.wav');
-let joinSound = new Audio('../sounds/join.wav');
-let fighterHitSound = new Audio('../sounds/hit.wav');
-let healSound = new Audio('../sounds/heal.wav');
+let bossHitSound = new Audio('bossHit.wav');
+let joinSound = new Audio('join.wav');
+let fighterHitSound = new Audio('hit.wav');
+let healSound = new Audio('heal.wav');
 
 function sleep(sec) 
 {
