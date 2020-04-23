@@ -23,6 +23,8 @@ let bossHitSound = new Audio('bossHit.wav');
 let joinSound = new Audio('join.wav');
 let fighterHitSound = new Audio('hit.wav');
 let healSound = new Audio('heal.wav');
+let itemFoundSound = new Audio('item.wav');
+let itemAttackSound = new Audio('boom.wav');
 
 function sleep(sec) 
 {
@@ -80,6 +82,7 @@ async function fightersTurn(fighterID)
                     gameInfo[findFighter].itemTick = 0;
                     statusMesssage(`${gameInfo[findFighter].name} found an item!`);
                     itemIcon(fighterID, true);
+                    itemFoundSound.play();
                     await sleep(1);
                 }
             }
@@ -318,11 +321,18 @@ async function useItem(user)
             let healChance = randomNumber(1,2);
             if(healChance == 2)
             {
-                let backfireChance = randomNumber(1,10);
+                let backfireChance = randomNumber(1,5);
                 if(backfireChance == 2)
                 {
+                    let healedBossClass = document.getElementsByClassName('bossBox')[0];
+                    let healedBossImage = healedBossClass.querySelector('.boss');
+                    let oldImage = healedBossImage.innerHTML;
+                    healedBossImage.innerHTML += '<img src="hearts.png">';
+                    healSound.play();
                     await updateHealth(0, (gameInfo.boss.health + 10));
                     statusMesssage(`${gameInfo[foundFighter].name} healed the boss 10HP!`);
+                    await sleep(2);
+                    healedBossImage.innerHTML = oldImage;
                 }
                 else
                 {
@@ -345,8 +355,16 @@ async function useItem(user)
             }
             else
             {
-                statusMesssage(`${gameInfo[foundFighter].name}'s item damaged ${gameInfo.boss.name} 5 HP!`);
-                await updateHealth(0, (gameInfo.boss.health - 5));
+                let healedBossClass = document.getElementsByClassName('bossBox')[0];
+                let healedBossImage = healedBossClass.querySelector('.boss');
+                let oldImage = healedBossImage.innerHTML;
+                healedBossImage.innerHTML += '<img src="boom.png">';                
+                itemAttackSound.play();
+                let itemAttackDamage = (5 + randomNumber(0,5));
+                statusMesssage(`${gameInfo[foundFighter].name}'s item did ${itemAttackDamage} damage!`);
+                await updateHealth(0, (gameInfo.boss.health - itemAttackDamage));
+                await sleep(1);
+                healedBossImage.innerHTML = oldImage;                
             }
             await sleep(1);
         }
@@ -403,15 +421,15 @@ async function processChat(channel, user, message, self)
     {
         await useItem(user);
     }
-    // if(message.toLowerCase() == 'a')
-    // { 
-    //     // test command
-    //     gameInfo.fighter1.item = true;
-    //     gameInfo.fighter1.itemTick = 0;
-    //     statusMesssage(`${gameInfo.fighter1.name} found an !item`);
-    //     itemIcon(1, true);
-    //     await sleep(1);
-    // }
+    if(message.toLowerCase() == 'a')
+    { 
+        // test command
+        gameInfo.fighter1.item = true;
+        gameInfo.fighter1.itemTick = 0;
+        statusMesssage(`${gameInfo.fighter1.name} found an !item`);
+        itemIcon(1, true);
+        await sleep(1);
+    }
 
 }
 
