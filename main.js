@@ -13,7 +13,7 @@ let healthBarHTML = '<div class="fighterImage"></div><div class="progress"><div 
 let itemBarHTML = '<div class="fighterItem"></div>';
 
 let gameInfo = {gameActive: false,
-boss: {active: true, name: 'Goteem man', health: 100, item: false, healCount: 0, minAttack: 1, maxAttack: 5, image: 'goteem.png'},
+boss: {active: true, name: 'Goteem man', health: 100, item: false, healCount: 0, minAttack: 2, maxAttack: 10, image: 'goteem.png'},
 fighter1: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: 'knight-orange.png', animation: undefined},
 fighter2: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: 'knight-orange.png', animation: undefined},
 fighter3: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: 'knight-orange.png', animation: undefined},
@@ -52,7 +52,7 @@ function itemIcon(fighterID, status)
     }
 }
 
-async function attackBoss(fighterID)
+async function fightersTurn(fighterID)
 {
     let findFighter = 'fighter' + fighterID;
     if(gameInfo[findFighter].active && gameInfo[findFighter].alive)
@@ -81,70 +81,47 @@ async function attackBoss(fighterID)
     }
 }
 
+async function bossTurn()
+{
+    statusMesssage(`${gameInfo.boss.name} attacked!`);
+    await sleep(1);
+    for(let fid = 1; fid <= 4; fid++)
+    {
+        if(gameInfo['fighter'+fid].active && gameInfo['fighter'+fid].alive)
+        {
+            let attackChance = randomNumber(1,10);
+            if(attackChance == 5)
+            {  
+                console.log(`Skipping attack on ${gameInfo['fighter'+fid].name}`);
+                continue;
+            }
+            let bossAttack = randomNumber(gameInfo.boss.minAttack, gameInfo.boss.maxAttack);
+            bossAttackAnimation.play();            
+            let dodgeChance = randomNumber(1, 20);
+            if(dodgeChance == 6)
+            {
+                await sleep(1);
+                statusMesssage(`${gameInfo['fighter'+fid].name} dodged!`);
+            }
+            else
+            {
+                statusMesssage(`${gameInfo['fighter'+fid].name} took ${bossAttack} damage`);
+                await updateHealth(fid, (gameInfo['fighter'+fid].health - bossAttack));
+            }
+            await sleep(1);
+        }
+    }
+    await sleep(1);
+}
+
 async function runTurn()
 {
     if(gameInfo.gameActive)
     {
-        let bossAttack = randomNumber(gameInfo.boss.minAttack, gameInfo.boss.maxAttack);
-        statusMesssage(`${gameInfo.boss.name} attacked for ${bossAttack} damage`);
-        bossAttackAnimation.play();
-        // moved sleep to after health updates 
-        if(gameInfo.fighter1.alive)
-        {
-            let dodgeChance = randomNumber(1, 20);
-            if(dodgeChance == 6)
-            {
-                statusMesssage(`${gameInfo.fighter1.name} dodged!`);
-                await sleep(1);
-            }
-            else
-            {
-                await updateHealth(1, (gameInfo.fighter1.health - bossAttack));
-            }
-        }
-        if(gameInfo.fighter2.alive)
-        {
-            let dodgeChance = randomNumber(1, 20);
-            if(dodgeChance == 6)
-            {
-                statusMesssage(`${gameInfo.fighter2.name} dodged!`);
-                await sleep(1);
-            }
-            else
-            {
-                await updateHealth(2, (gameInfo.fighter2.health - bossAttack));            
-            }
-        }
-        if(gameInfo.fighter3.alive)
-        {
-            let dodgeChance = randomNumber(1, 20);
-            if(dodgeChance == 6)
-            {
-                statusMesssage(`${gameInfo.fighter3.name} dodged!`);
-                await sleep(1);
-            }
-            else
-            {
-                await updateHealth(3, (gameInfo.fighter3.health - bossAttack));            
-            }
-        }
-        if(gameInfo.fighter4.alive)
-        {
-            let dodgeChance = randomNumber(1, 20);
-            if(dodgeChance == 6)
-            {
-                statusMesssage(`${gameInfo.fighter4.name} dodged!`);
-                await sleep(1);
-            }
-            else
-            {            
-                await updateHealth(4, (gameInfo.fighter4.health - bossAttack));            
-            }
-        }
-        await sleep(1);
+        await bossTurn();
         for(let fid = 1; fid <= 4; fid++)
         {
-            await attackBoss(fid);
+            await fightersTurn(fid);
         }
     }
     else
@@ -343,8 +320,14 @@ async function useItem(user)
                 {
                     for(let hid = 1; hid <= 4; hid++)                    
                     {
+                        let healedFighterClass = document.getElementsByClassName('fighter'+hid)[0];
+                        let healedFighterImage = healedFighterClass.querySelector('.fighterImage');
+                        let oldImage = healedFighterImage.innerHTML;
+                        healedFighterImage.innerHTML += '<img src="hearts.png">';
                         await updateHealth(hid, (gameInfo['fighter'+hid].health + 10));
                         statusMesssage(`${gameInfo[foundFighter].name} healed everyone 10HP!`);
+                        await sleep(1);
+                        healedFighterImage.innerHTML = oldImage;
                     }
                 }
             }
@@ -408,12 +391,17 @@ async function processChat(channel, user, message, self)
     {
         await useItem(user);
     }
-    // if(message.toLowerCase() == 'a')
-    // { 
-    //     // bossAttackAnimation.play();
-    //     // gameInfo.fighter1.animation.play();
-    //     // test command
-    // }
+    if(message.toLowerCase() == 'a')
+    { 
+        // test command
+        // gameInfo.fighter1.item = true;
+        // gameInfo.fighter1.itemTick = 0;
+        // statusMesssage(`${gameInfo.fighter1.name} found an item!`);
+        // itemIcon(1, true);
+        // await sleep(1);
+        // bossAttackAnimation.play();
+        // gameInfo.fighter1.animation.play();
+    }
 
 }
 
@@ -434,7 +422,7 @@ client.addListener('message', processChat);
 client.connect();
 
 // var gameHandle = setInterval(runTurn, 5000); 
-var gameHandle = setInterval(runTurn, 30000); // 30000 = 30 seconds - see fix timing note below
+var gameHandle = setInterval(runTurn, 15000); // 30000 = 30 seconds
 statusMesssage(`${gameInfo.boss.name} appeared! Type !join to join.`);
 
 var bossAttackAnimation = anime({
