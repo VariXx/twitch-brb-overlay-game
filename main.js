@@ -80,10 +80,10 @@ async function fightersTurn(fighterID)
                 {
                     gameInfo[findFighter].item = true;
                     gameInfo[findFighter].itemTick = 0;
-                    statusMesssage(`${gameInfo[findFighter].name} found an item!`);
+                    statusMesssage(`${gameInfo[findFighter].name} found an !item`);
                     itemIcon(fighterID, true);
                     itemFoundSound.play();
-                    await sleep(1);
+                    await sleep(2);
                 }
             }
         }
@@ -365,7 +365,7 @@ async function useItem(user)
                             healedFighterImage.innerHTML += '<img src="hearts.png">';
                             healSound.play();
                             await updateHealth(hid, (gameInfo['fighter'+hid].health + 10));
-                            statusMesssage(`${gameInfo[foundFighter].name} healed everyone 10HP!`);
+                            statusMesssage(`${gameInfo[foundFighter].name} healed ${gameInfo['fighter'+hid].name} 10HP!`);
                             await sleep(2);
                             healedFighterImage.innerHTML = oldImage;
                         }
