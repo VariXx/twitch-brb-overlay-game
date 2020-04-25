@@ -1,0 +1,10 @@
+let gameSettings = {
+    "channel": "",
+    "clientId": "",
+    "roundTime": "10000",  // 15000 = 15 seconds
+    "healChanceMin": 1,
+    "healChanceMax": 3, // chance the item heals instead of doing damage
+    "healBackfireChanceMin": 1, 
+    "healBackfireChanceMax": 5, // chance the item heals the boss instead
+    "defaultPlayerImage": "knight-orange.png" // default image to use if user has invalid or default twitch profile image 
+};

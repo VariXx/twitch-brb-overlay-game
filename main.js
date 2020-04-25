@@ -1,9 +1,10 @@
-let twitchClientID = ''; // TO DO LOAD THIS FROM SOMEWHERE ELSE BEFORE RELEASING SOURCE
+// update settings in settings.js 
+// let testCommands = true;
 
-var channels = ['varixx'];
+var channels = [gameSettings.channel];
 clientOptions = {
     options: {
-            debug: true
+            debug: false
         },
     channels: channels
 };
@@ -13,11 +14,11 @@ let healthBarHTML = '<div class="fighterImage"></div><div class="progress"><div 
 let itemBarHTML = '<div class="fighterItem"></div>';
 
 let gameInfo = {gameActive: false,
-boss: {active: true, name: 'Goteem man', health: 100, item: false, healCount: 0, minAttack: 2, maxAttack: 10, image: 'goteem.png'},
-fighter1: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: 'knight-orange.png', animation: undefined},
-fighter2: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: 'knight-orange.png', animation: undefined},
-fighter3: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: 'knight-orange.png', animation: undefined},
-fighter4: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: 'knight-orange.png', animation: undefined}};
+enemy: {active: true, name: 'Goteem man', health: 100, item: false, healCount: 0, minAttack: 2, maxAttack: 10, image: 'goteem.png'}, 
+fighter1: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: gameSettings.defaultPlayerImage, animation: undefined},
+fighter2: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: gameSettings.defaultPlayerImage, animation: undefined},
+fighter3: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: gameSettings.defaultPlayerImage, animation: undefined},
+fighter4: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: gameSettings.defaultPlayerImage, animation: undefined}};
 
 let bossHitSound = new Audio('bossHit.wav');
 let joinSound = new Audio('join.wav');
@@ -33,7 +34,7 @@ function sleep(sec)
 
 function randomNumber(min, max)
 {
-    let rand = Math.floor((Math.random() * max) + min);
+    let rand = Math.floor(Math.random() * (max - min + 1) + min);
     return rand;
 }
 
@@ -68,7 +69,7 @@ async function fightersTurn(fighterID)
         gameInfo[findFighter].animation.play();
         statusMesssage(`${gameInfo[findFighter].name} attacked for ${playerAttack} damage`);
         fighterHitSound.play();
-        await updateHealth(0, (gameInfo.boss.health - playerAttack));
+        await updateHealth(0, (gameInfo.enemy.health - playerAttack));
         await sleep(1);
         if(!gameInfo[findFighter].item && gameInfo[findFighter].alive)
         {
@@ -92,7 +93,7 @@ async function fightersTurn(fighterID)
 
 async function bossTurn()
 {
-    statusMesssage(`${gameInfo.boss.name} attacked!`);
+    statusMesssage(`${gameInfo.enemy.name} attacked!`);
     await sleep(1);
     for(let fid = 1; fid <= 4; fid++)
     {
@@ -101,16 +102,18 @@ async function bossTurn()
             let attackChance = randomNumber(1,10);
             if(attackChance == 5)
             {  
-                console.log(`Skipping attack on ${gameInfo['fighter'+fid].name}`);
+                // console.log(`Skipping attack on ${gameInfo['fighter'+fid].name}`);
+                statusMesssage(`${gameInfo.enemy.name} missed ${gameInfo['fighter'+fid].name}}!`);
+                await sleep(1);
                 continue;
             }
-            let bossAttack = randomNumber(gameInfo.boss.minAttack, gameInfo.boss.maxAttack);
+            let bossAttack = randomNumber(gameInfo.enemy.minAttack, gameInfo.enemy.maxAttack);
             bossAttackAnimation.play();            
             let dodgeChance = randomNumber(1, 20);
             if(dodgeChance == 6)
             {
-                await sleep(1);
                 statusMesssage(`${gameInfo['fighter'+fid].name} dodged!`);
+                await sleep(1);
             }
             else
             {
@@ -136,7 +139,7 @@ async function runTurn()
     }
     else
     {
-        statusMesssage(`${gameInfo.boss.name} appeared! Type !join to join.`);
+        statusMesssage(`${gameInfo.enemy.name} appeared! Type !join to join.`);
     }
 }
 
@@ -149,11 +152,11 @@ function endGame()
 {
     clearInterval(gameHandle);
     gameInfo.gameActive = false;
-    gameInfo.boss.active = false;
-    gameInfo.boss.health = false;
-    gameInfo.boss.healCount = 0;
-    gameInfo.boss.minAttack = 0;
-    gameInfo.boss.maxAttack = 0;
+    gameInfo.enemy.active = false;
+    gameInfo.enemy.health = false;
+    gameInfo.enemy.healCount = 0;
+    gameInfo.enemy.minAttack = 0;
+    gameInfo.enemy.maxAttack = 0;
     // updateHealth(0, 100); // do this on restart game instead when the command is created 
 
     for(let fid = 1; fid <= 4; fid++)
@@ -163,7 +166,7 @@ function endGame()
         gameInfo['fighter'+fid].name = 'nobody'; 
         gameInfo['fighter'+fid].item = false; 
         gameInfo['fighter'+fid].itemTick = 0;
-        gameInfo['fighter'+fid].image = 'knight-orange.png';
+        gameInfo['fighter'+fid].image = gameSettings.defaultPlayerImage;
         gameInfo['fighter'+fid].animation = undefined;
         console.log(`stats reset for fighter ${fid}`);
     }
@@ -176,11 +179,11 @@ async function updateHealth(fighterID, health)
     {
         let bossBar = document.getElementsByClassName('bossBox')[0];
         healthBar = bossBar.querySelector('.progress-bar');
-        gameInfo.boss.health = health;
-        if(gameInfo.boss.health <= 0)
+        gameInfo.enemy.health = health;
+        if(gameInfo.enemy.health <= 0)
         {
             endGame();
-            statusMesssage(`${gameInfo.boss.name} has been defeated!`);
+            statusMesssage(`${gameInfo.enemy.name} has been defeated!`);
         }
     }
     else if(fighterID >= 1 && fighterID < 5)
@@ -212,7 +215,7 @@ async function updateHealth(fighterID, health)
                     if(gameInfo.fighter1.alive === false && gameInfo.fighter2.alive === false && gameInfo.fighter3.alive === false && gameInfo.fighter4.alive === false)
                     {
                         endGame();
-                        statusMesssage(`${gameInfo.boss.name} wins!`);
+                        statusMesssage(`${gameInfo.enemy.name} wins!`);
                     }
                 }
                 else
@@ -220,7 +223,7 @@ async function updateHealth(fighterID, health)
                     if(gameInfo.fighter1.alive === false && gameInfo.fighter2.alive === false && gameInfo.fighter3.alive === false)
                     {
                         endGame();
-                        statusMesssage(`${gameInfo.boss.name} wins!`);
+                        statusMesssage(`${gameInfo.enemy.name} wins!`);
                     }
                 }
             }
@@ -229,7 +232,7 @@ async function updateHealth(fighterID, health)
                 if(gameInfo.fighter1.alive === false && gameInfo.fighter2.alive === false)
                 {
                     endGame();
-                    statusMesssage(`${gameInfo.boss.name} wins!`);
+                    statusMesssage(`${gameInfo.enemy.name} wins!`);
                 }
             }
         }
@@ -238,7 +241,7 @@ async function updateHealth(fighterID, health)
             if(gameInfo.fighter1.alive === false)
             {
                 endGame();
-                statusMesssage(`${gameInfo.boss.name} wins!`);
+                statusMesssage(`${gameInfo.enemy.name} wins!`);
             }
         }
     }
@@ -260,7 +263,7 @@ async function getTwitchImage(user)
         method: 'GET',
         headers: {
             'Accept': 'application/vnd.twitchtv.v5+json',
-            'Client-ID':  twitchClientID
+            'Client-ID':  gameSettings.clientId
         }
     });
     try
@@ -337,10 +340,10 @@ async function useItem(user)
             statusMesssage(`${gameInfo[foundFighter].name} used an item!`);
             gameInfo[foundFighter].item = false;
             itemIcon(foundFighterID, false);
-            let healChance = randomNumber(1,2);
+            let healChance = randomNumber(gameSettings.healChanceMin, gameSettings.healChanceMax);
             if(healChance == 2)
             {
-                let backfireChance = randomNumber(1,5);
+                let backfireChance = randomNumber(gameSettings.healBackfireChanceMin, gameSettings.healBackfireChanceMax);
                 if(backfireChance == 2)
                 {
                     let healedBossClass = document.getElementsByClassName('bossBox')[0];
@@ -348,7 +351,7 @@ async function useItem(user)
                     let oldImage = healedBossImage.innerHTML;
                     healedBossImage.innerHTML += '<img src="hearts.png">';
                     healSound.play();
-                    await updateHealth(0, (gameInfo.boss.health + 10));
+                    await updateHealth(0, (gameInfo.enemy.health + 10));
                     statusMesssage(`${gameInfo[foundFighter].name} healed the boss 10HP!`);
                     await sleep(2);
                     healedBossImage.innerHTML = oldImage;
@@ -364,6 +367,12 @@ async function useItem(user)
                             let oldImage = healedFighterImage.innerHTML;
                             healedFighterImage.innerHTML += '<img src="hearts.png">';
                             healSound.play();
+                            if(!gameInfo['fighter'+hid].alive)
+                            {
+                                gameInfo['fighter'+hid].alive = true;
+                                gameInfo['fighter'+hid].health = 0; // reset to 0 in case they're negative health
+                                statusMesssage(`${gameInfo['fighter'+hid].name} was revived!`);
+                            }
                             await updateHealth(hid, (gameInfo['fighter'+hid].health + 10));
                             statusMesssage(`${gameInfo[foundFighter].name} healed ${gameInfo['fighter'+hid].name} 10HP!`);
                             await sleep(2);
@@ -381,7 +390,7 @@ async function useItem(user)
                 itemAttackSound.play();
                 let itemAttackDamage = (5 + randomNumber(0,5));
                 statusMesssage(`${gameInfo[foundFighter].name}'s item did ${itemAttackDamage} damage!`);
-                await updateHealth(0, (gameInfo.boss.health - itemAttackDamage));
+                await updateHealth(0, (gameInfo.enemy.health - itemAttackDamage));
                 await sleep(1);
                 healedBossImage.innerHTML = oldImage;                
             }
@@ -431,7 +440,7 @@ async function processChat(channel, user, message, self)
         else // move this so fighter 1 can't join after the game has ended. this should go into a start game function that can be used to restart the game. 
         {
             gameInfo.gameActive = true;
-            gameInfo.boss.active = true;
+            gameInfo.enemy.active = true;
             await updateHealth(0, 100); // boss
             await addFighter(1, user);
         }
@@ -442,14 +451,16 @@ async function processChat(channel, user, message, self)
     }
     // if(message.toLowerCase() == 'a') // COMMENT THIS OUT BEFORE COMMIT
     // { 
-    //     // test command
-    //     gameInfo.fighter1.item = true;
-    //     gameInfo.fighter1.itemTick = 0;
-    //     statusMesssage(`${gameInfo.fighter1.name} found an !item`);
-    //     itemIcon(1, true);
-    //     await sleep(1);
+    //     if(testCommands)
+    //     {
+    //         // test command
+    //         gameInfo.fighter2.item = true;
+    //         gameInfo.fighter2.itemTick = 0;
+    //         statusMesssage(`${gameInfo.fighter2.name} found an !item`);
+    //         itemIcon(2, true);
+    //         await sleep(1);
+    //     }
     // }
-
 }
 
 var client = new tmi.client(clientOptions);
@@ -468,9 +479,8 @@ client.addListener('connected', function (address, port) {
 client.addListener('message', processChat);
 client.connect();
 
-// var gameHandle = setInterval(runTurn, 5000); 
-var gameHandle = setInterval(runTurn, 15000); // 15000 = 15 seconds
-statusMesssage(`${gameInfo.boss.name} appeared! Type !join to join.`);
+var gameHandle = setInterval(runTurn, gameSettings.roundTime);
+statusMesssage(`${gameInfo.enemy.name} appeared! Type !join to join.`);
 
 var bossAttackAnimation = anime({
     targets: '.boss',
