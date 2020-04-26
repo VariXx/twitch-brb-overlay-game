@@ -8,7 +8,7 @@ body{
     /* margin: 0;
     position: absolute;
     top: 40%;
-    left: 85%;
+    left: 85%; 
     transform: translate(-50%, -50%); */
     height: 350px;
     width: 300px;
@@ -26,16 +26,17 @@ body{
 .statusMessage
 {
     font-size:14px;
+    height:40px;
     font-weight: bold;
     text-align: center;
-    overflow: hidden;
     color:white;
+    overflow: hidden;
 }
 
 .fighters
 {
     padding-left:4%;
-    padding-top:10px;
+    padding-top:2px;
     height: 150px;
     width: 300px;
     font-size: 12px;

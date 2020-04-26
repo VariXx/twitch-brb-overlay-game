@@ -1,5 +1,5 @@
 // update settings in settings.js 
-// let testCommands = true;
+let testCommands = false; // TO DO change to false before commit 
 
 var channels = [gameSettings.channel];
 clientOptions = {
@@ -14,7 +14,7 @@ let healthBarHTML = '<div class="fighterImage"></div><div class="progress"><div 
 let itemBarHTML = '<div class="fighterItem"></div>';
 
 let gameInfo = {gameActive: false,
-enemy: {active: true, name: 'Goteem man', health: 100, item: false, healCount: 0, minAttack: 2, maxAttack: 10, image: 'goteem.png'}, 
+enemy: {active: true, name: 'Goteem man', health: 100, item: false, healCount: 0, minAttack: 2, maxAttack: 8, image: 'goteem.png'}, 
 fighter1: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: gameSettings.defaultPlayerImage, animation: undefined},
 fighter2: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: gameSettings.defaultPlayerImage, animation: undefined},
 fighter3: {active: false, alive: false, name: 'nobody', health: 0, item: false, itemTick: 0, image: gameSettings.defaultPlayerImage, animation: undefined},
@@ -65,7 +65,7 @@ async function fightersTurn(fighterID)
     let findFighter = 'fighter' + fighterID;
     if(gameInfo[findFighter].active && gameInfo[findFighter].alive)
     {
-        let playerAttack = randomNumber(1, 2);                        
+        let playerAttack = randomNumber(1,3);
         gameInfo[findFighter].animation.play();
         statusMesssage(`${gameInfo[findFighter].name} attacked for ${playerAttack} damage`);
         fighterHitSound.play();
@@ -453,12 +453,12 @@ async function processChat(channel, user, message, self)
     // { 
     //     if(testCommands)
     //     {
-    //         // test command
-    //         gameInfo.fighter2.item = true;
-    //         gameInfo.fighter2.itemTick = 0;
-    //         statusMesssage(`${gameInfo.fighter2.name} found an !item`);
-    //         itemIcon(2, true);
-    //         await sleep(1);
+    //         // // test command
+    //         // gameInfo.fighter2.item = true;
+    //         // gameInfo.fighter2.itemTick = 0;
+    //         // statusMesssage(`${gameInfo.fighter2.name} found an !item`);
+    //         // itemIcon(2, true);
+    //         // await sleep(1);
     //     }
     // }
 }
