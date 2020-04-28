@@ -1,4 +1,6 @@
 *.lnk
+test.js
+test.html
 creds.txt
 changes.txt
 settings.js
