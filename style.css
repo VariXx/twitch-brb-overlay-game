@@ -1,19 +1,20 @@
 body{
     overflow: hidden;
-    /* background-image: url('back-test.jpg'); */
+    background-image: url('back-test.jpg');
     background-position:center;
 }
 
 .bossBox{
     height: 350px;
     width: 300px;
+    visibility: hidden;        
 }
 
 .boss{
     margin-left: 75px;
     width: 150px;
     height: 150px;
-    background-image: url('goteem.png');
+    /* background-image: url('goteem.png'); */
     background-repeat: no-repeat;
     background-position: center;
 }
