@@ -1,6 +1,6 @@
 body{
     overflow: hidden;
-    /* background-image: url('back-test.jpg'); */
+    background-image: url('back-test.jpg');
     background-position:center;
 }
 
@@ -14,7 +14,6 @@ body{
     margin-left: 75px;
     width: 150px;
     height: 150px;
-    /* background-image: url('goteem.png'); */
     background-repeat: no-repeat;
     background-position: center;
 }

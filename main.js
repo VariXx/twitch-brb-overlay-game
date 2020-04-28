@@ -93,7 +93,7 @@ async function spawnEnemy()
       });    
     let enemyClass = document.getElementsByClassName('bossBox')[0];
     let enemyImage = enemyClass.querySelector('.boss');
-    enemyImage.style.backgroundImage = `url('images/${currentEnemy.image}')`;    
+    enemyImage.style.backgroundImage = `url('${currentEnemy.image}')`;    
     await enemyBox(true);
     await updateHealth(currentEnemy, currentEnemy.health);
     statusMesssage(`${currentEnemy.name} appeared!`);
