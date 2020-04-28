@@ -28,7 +28,7 @@ body{
     overflow: hidden;
 }
 
-.fighters
+.players
 {
     padding-left:4%;
     padding-top:2px;
@@ -47,7 +47,7 @@ body{
     visibility: hidden;    
 }
 
-.fighterImage{
+.playerImage{
     background-image: url('knight-orange.png');
     background-position: center;
     background-repeat: no-repeat;
@@ -58,7 +58,7 @@ body{
     text-align:center;
 }
 
-.fighterItem{
+.playerItem{
     margin-left: 40%;
     height:15px;
     width:15px;
