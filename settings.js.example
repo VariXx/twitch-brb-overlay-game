@@ -6,21 +6,18 @@ let gameSettings = {
     "healChanceMax": 3, // chance the item heals instead of doing damage
     "healBackfireChanceMin": 1, 
     "healBackfireChanceMax": 5, // chance the item heals the boss instead
-    "defaultPlayerImage": "knight-orange.png" // default image to use if user has invalid or default twitch profile image 
+    "defaultPlayerImage": "images/knight-orange.png" // default image to use if user has invalid or default twitch profile image 
 };
 
 let enemies = {
 bosses:[
-    {id: 0, name: 'Goteem man', image: 'goteem.png', health: 100, minAttack: 2, maxAttack: 8},
-    {id: 1, name: 'Gaben', image: 'gaben.png', health: 100, minAttack: 6, maxAttack: 18}
+    {name: 'Orcy McOrcinton', image: 'images/enemy-green.png', health: 100, minAttack: 2, maxAttack: 8},
+    {name: 'Big Flame', image: 'images/enemy-big-flame.png', health: 80, minAttack: 2, maxAttack: 4},
 ],
 regular:[
-    {id: 0, name: 'Orcy McOrcinton', image: 'enemy-green.png', health: 20, minAttack: 1, maxAttack: 3},
-    {id: 1, name: 'Wizard', image: 'enemy-hood.png', health: 15, minAttack: 1, maxAttack: 2},
-    {id: 2, name: 'Knight', image: 'enemy-knight.png', health: 10, minAttack: 3, maxAttack: 4},
-    {id: 3, name: 'Bat', image: 'enemy-bat.png', health: 5, minAttack: 1, maxAttack: 1},
-    {id: 4, name: 'Big Flame', image: 'enemy-big-flame.png', health: 8, minAttack: 1, maxAttack: 3},
-    {id: 5, name: 'Flame', image: 'enemy-flame.png', health: 5, minAttack: 1, maxAttack: 1}
+    {name: 'Wizard', image: 'images/enemy-hood.png', health: 15, minAttack: 1, maxAttack: 2},
+    {name: 'Knight', image: 'images/enemy-knight.png', health: 10, minAttack: 3, maxAttack: 4},
+    {name: 'Bat', image: 'images/enemy-bat.png', health: 5, minAttack: 1, maxAttack: 1},
+    {name: 'Flame', image: 'images/enemy-flame.png', health: 5, minAttack: 1, maxAttack: 1}
 ]
 };
-
