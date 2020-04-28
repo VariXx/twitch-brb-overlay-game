@@ -1,5 +1,5 @@
 // update settings in settings.js 
-let testCommands = true; // TO DO change to false before commit 
+let testCommands = false; // TO DO change to false before commit 
 
 var channels = [gameSettings.channel];
 clientOptions = {
@@ -51,12 +51,12 @@ let itemBarHTML = '<div class="playerItem"></div>';
 let gameInfo = {gameActive: false, enemiesKilled: true};
 let currentEnemy = null;
 
-let enemyHitSound = new Audio('bossHit.wav');
-let joinSound = new Audio('join.wav');
-let playerHitSound = new Audio('hit.wav');
-let healSound = new Audio('heal.wav');
-let itemFoundSound = new Audio('item.wav');
-let itemAttackSound = new Audio('boom.wav');
+let enemyHitSound = new Audio('sounds/bossHit.wav');
+let joinSound = new Audio('sounds/join.wav');
+let playerHitSound = new Audio('sounds/hit.wav');
+let healSound = new Audio('sounds/heal.wav');
+let itemFoundSound = new Audio('sounds/item.wav');
+let itemAttackSound = new Audio('sounds/boom.wav');
 
 async function enemyBox(status)
 {
@@ -93,7 +93,7 @@ async function spawnEnemy()
       });    
     let enemyClass = document.getElementsByClassName('bossBox')[0];
     let enemyImage = enemyClass.querySelector('.boss');
-    enemyImage.style.backgroundImage = `url('${currentEnemy.image}')`;    
+    enemyImage.style.backgroundImage = `url('images/${currentEnemy.image}')`;    
     await enemyBox(true);
     await updateHealth(currentEnemy, currentEnemy.health);
     statusMesssage(`${currentEnemy.name} appeared!`);
@@ -634,7 +634,7 @@ async function useItem(user)
                     let healedEnemyClass = document.getElementsByClassName('bossBox')[0];
                     let healedEnemyImage = healedEnemyClass.querySelector('.boss');
                     let oldImage = healedEnemyImage.innerHTML;
-                    healedEnemyImage.innerHTML += '<img src="hearts.png">';
+                    healedEnemyImage.innerHTML += '<img src="images/hearts.png">';
                     healSound.play();
                     await updateHealth(currentEnemy, (currentEnemy.health + 10));
                     statusMesssage(`${foundPlayer.name} healed ${currentEnemy.name} 10HP!`);
@@ -647,7 +647,7 @@ async function useItem(user)
                             let healedPlayerClass = document.getElementsByClassName(`player${x}`)[0];
                             let healedPlayerImage = healedPlayerClass.querySelector('.playerImage');
                             let oldImage = healedPlayerImage.innerHTML;
-                            healedPlayerImage.innerHTML += '<img src="hearts.png">';
+                            healedPlayerImage.innerHTML += '<img src="images/hearts.png">';
                             healSound.play();                            
                             if(!players[x].alive){
                                 players[x].alive = true;
@@ -666,7 +666,7 @@ async function useItem(user)
                 let healedEnemyClass = document.getElementsByClassName('bossBox')[0];
                 let healedEnemyImage = healedEnemyClass.querySelector('.boss');
                 let oldImage = healedEnemyImage.innerHTML;
-                healedEnemyImage.innerHTML += '<img src="boom.png">';                
+                healedEnemyImage.innerHTML += '<img src="images/boom.png">';                
                 itemAttackSound.play();
                 let itemAttackDamage = (5 + randomNumber(0,5));
                 statusMesssage(`${foundPlayer.name}'s item did ${itemAttackDamage} damage!`);
@@ -773,18 +773,18 @@ async function processChat(channel, user, message, self)
     if(message.toLowerCase() == '!item'){
         await useItem(user);
     }
-    if(message.toLowerCase() == 'a') // TO DO comment out before commit 
-    { 
-        if(testCommands)
-        {
-            players[0].item = true;
-            players[0].itemTick = 0;
-            statusMesssage(`${players[0].name} found an !item`);
-            itemIcon(players[0].playerId, true);
-            itemFoundSound.play();
-            await sleep(2);
-        }
-    }
+    // if(message.toLowerCase() == 'a') // TO DO comment out before commit 
+    // { 
+    //     if(testCommands)
+    //     {
+    //         players[0].item = true;
+    //         players[0].itemTick = 0;
+    //         statusMesssage(`${players[0].name} found an !item`);
+    //         itemIcon(players[0].playerId, true);
+    //         itemFoundSound.play();
+    //         await sleep(2);
+    //     }
+    // }
 }
 
 var client = new tmi.client(clientOptions);

@@ -49,7 +49,7 @@ body{
 }
 
 .playerImage{
-    background-image: url('knight-orange.png');
+    background-image: url('images/knight-orange.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -63,7 +63,7 @@ body{
     margin-left: 40%;
     height:15px;
     width:15px;
-    background-image: url('chest.png');
+    background-image: url('images/chest.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
