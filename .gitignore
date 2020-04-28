@@ -1,4 +1,5 @@
 *.lnk
 creds.txt
+changes.txt
 settings.js
 back-test.jpg
