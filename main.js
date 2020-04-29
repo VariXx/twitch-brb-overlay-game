@@ -29,6 +29,7 @@ class Enemy {
         this.name = name;
         this.image = image;
         this.health = health;
+        this.maxHealth = health;
         this.minAttack = minAttack;
         this.maxAttack = maxAttack;
         this.active = true;
@@ -45,7 +46,7 @@ class Enemy {
     }
 }
 
-let healthBarHTML = '<div class="playerImage"></div><div class="progress"><div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div></div>';
+let healthBarHTML = '<div class="playerImage"></div><div class="progress"><div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>';
 let itemBarHTML = '<div class="playerItem"></div>';
 
 let gameInfo = {gameActive: false, enemiesKilled: true};
@@ -60,7 +61,7 @@ let itemAttackSound = new Audio('sounds/boom.wav');
 
 async function enemyBox(status)
 {
-    let enemyHTML = `<div class="bossBox"><div class='boss'></div><div class="progress"><div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><div class="statusMessage"></div>`;
+    // let enemyHTML = `<div class="bossBox"><div class='boss'></div><div class="progress"><div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><div class="statusMessage"></div>`;
     let enemyBar = document.getElementsByClassName('bossBox')[0];
     if(status){
         enemyBar.style.visibility = 'visible';
@@ -95,7 +96,7 @@ async function spawnEnemy()
     let enemyImage = enemyClass.querySelector('.boss');
     enemyImage.style.backgroundImage = `url('${currentEnemy.image}')`;    
     await enemyBox(true);
-    await updateHealth(currentEnemy, currentEnemy.health);
+    await updateHealth(currentEnemy, currentEnemy.maxHealth);
     statusMesssage(`${currentEnemy.name} appeared!`);
     await sleep(1);
 }
@@ -194,10 +195,10 @@ async function playersTurn()
                     if(!players[x].item && players[x].alive)
                     {
                         players[x].itemTick++;
-                        if(players[x].itemTick >= 5)
+                        if(players[x].itemTick >= 4)
                         {
-                            let itemChance = randomNumber(1,5);
-                            if(itemChance == 4)
+                            let itemChance = randomNumber(1,3);
+                            if(itemChance == 2)
                             {
                                 players[x].item = true;
                                 players[x].itemTick = 0;
@@ -393,10 +394,12 @@ async function updateHealth(updateObj, newHealth)
 {
     // start class rewrite
     let healthBar = null;
+    let healthPercent = 0;
     if(updateObj instanceof Player){
         let playerBar = document.getElementsByClassName(`player${updateObj.playerId}`)[0];
         healthBar = playerBar.querySelector('.progress-bar');
         updateObj.health = newHealth;
+        healthPercent = updateObj.health;
         if(updateObj.health <= 0){
             let teamAlive = false;
             statusMesssage(`${updateObj.name} died!`);
@@ -419,18 +422,20 @@ async function updateHealth(updateObj, newHealth)
         let bossBar = document.getElementsByClassName('bossBox')[0];
         healthBar = bossBar.querySelector('.progress-bar');
         updateObj.health = newHealth;
+        healthPercent = (updateObj.health / updateObj.maxHealth) * 100; 
         if(updateObj.health <= 0)
         {
             updateObj.alive = false;
             // endGame();
             statusMesssage(`${updateObj.name} has been defeated!`);
             await sleep(1);
+            await enemyBox(false);
             gameInfo.enemiesKilled++;
-            await spawnEnemy();
+            spawnEnemy(); // dont wait otherwise you'll have to wait for updateHealth() for new enemy TO DO - move this to runTurn(). spawn an enemy if there isn't one active/alive and the game is active
         }
     }
     if(healthBar != null){
-        healthBar.setAttribute("style", `width: ${updateObj.health}%`);
+        healthBar.setAttribute("style", `width: ${healthPercent}%`);
     }
     // end class rewrite
     // let healthBar = null;
