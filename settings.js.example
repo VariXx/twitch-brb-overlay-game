@@ -15,7 +15,7 @@ bosses:[
     {name: 'Big Flame', image: 'images/enemy-big-flame.png', health: 80, minAttack: 2, maxAttack: 4},
 ],
 regular:[
-    {name: 'Wizard', image: 'images/enemy-hood.png', health: 15, minAttack: 1, maxAttack: 2},
+    {name: 'Wizard', image: 'images/enemy-wizard.png', health: 15, minAttack: 1, maxAttack: 2},
     {name: 'Knight', image: 'images/enemy-knight.png', health: 10, minAttack: 3, maxAttack: 4},
     {name: 'Bat', image: 'images/enemy-bat.png', health: 5, minAttack: 1, maxAttack: 1},
     {name: 'Flame', image: 'images/enemy-flame.png', health: 5, minAttack: 1, maxAttack: 1}
