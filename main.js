@@ -547,6 +547,13 @@ async function addPlayer(user)
 {
     // start class rewrite   
     if(players.length < 4){
+        for(let p in players) {
+            if((players[p].name).toLowerCase() === (user['display-name']).toLowerCase())
+            {
+                console.log(`${user['display-name']} tried to join twice`);
+                return;
+            }
+        }
         if(currentEnemy !== null){
             let newPId = players.length;
             players.push(new Player(user['display-name'], 100, newPId));
