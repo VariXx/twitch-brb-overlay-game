@@ -472,11 +472,6 @@ async function processChat(channel, user, message, self) {
     if(message.toLowerCase() == '!item') {
         await useItem(user);
     }
-    // if(message.toLowerCase() == '!deez') { // COMMENT OUT BEFORE COMMIT 
-    //     if(testCommands) {
-    //         setItem(players[0], true);
-    //     }
-    // }
 }
 
 var client = new tmi.client(clientOptions);
