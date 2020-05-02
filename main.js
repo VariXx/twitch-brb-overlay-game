@@ -124,7 +124,6 @@ function updatePlayerImage(updateObj) {
 }
 
 function itemIcon(updateId, status) {
-    // start class rewrite
     let playerClass = document.getElementsByClassName(`player${updateId}`)[0];
     let itemIcon = playerClass.querySelector('.playerItem');
     if(status) {
@@ -135,11 +134,9 @@ function itemIcon(updateId, status) {
     }
 }
 
-// async function fightersTurn(fighterID)
 async function playersTurn() {
     if(currentEnemy !== null) {
         if(currentEnemy.alive) {              
-            // start class rewrite
             for(let x in players) {
                 if(players[x].alive && players[x].active) {
                     let playerAttack = randomNumber(1,3);
@@ -173,13 +170,11 @@ async function enemyTurn()
 {
     if(currentEnemy !== null) {
         if(currentEnemy.alive) {          
-            // start class rewrite
             statusMesssage(`${currentEnemy.name} attacked!`);
             for(let x in players) {
                 if(players[x].active && players[x].alive) {
                     let attackChance = randomNumber(1,10);
                     if(attackChance == 5) {  
-                        // console.log(`Skipping attack on ${players[x].name}`);
                         statusMesssage(`${currentEnemy.name} missed ${players[x].name}!`);
                         await sleep(1);
                         continue;
@@ -237,9 +232,7 @@ function endGame() {
     console.log('game ended');
 }
 
-// async function updateHealth(fighterID, health)
 async function updateHealth(updateObj, newHealth) {
-    // start class rewrite
     let healthBar = null;
     let healthPercent = 0;
     if(updateObj instanceof Player) {
@@ -313,9 +306,7 @@ async function getTwitchImage(user) {
     }
 }
 
-// async function addFighter(fighterID, user)
 async function addPlayer(user) {
-    // start class rewrite   
     if(players.length < 4) {
         for(let p in players) {
             if((players[p].name).toLowerCase() === (user['display-name']).toLowerCase()) {
@@ -365,7 +356,6 @@ async function addPlayer(user) {
 }
 
 async function useItem(user) {
-    // start class rewrite
     let foundPlayer = null;
     for(let x in players) {
         if(players[x].name.toLowerCase() == user['display-name'].toLowerCase()) {
