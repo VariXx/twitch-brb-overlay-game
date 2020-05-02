@@ -11,7 +11,7 @@ clientOptions = {
 
 let players = [];
 let killCounterImage = 'images/skull.png';
-let healImage = 'images/hearts.png';
+let healImage = 'images/hearts-2.png';
 let boomImage = 'images/boom.png';
 
 class Character {
@@ -159,6 +159,15 @@ function increaseKillCounter() {
     gameInfo.enemiesKilled++;
 }
 
+function setItem(updateObj, status) { 
+    updateObj.item = status;
+    updateObj.itemTick = 0;
+    itemIcon(updateObj.playerId, status);
+    if(status) { 
+        itemFoundSound.play();
+    }
+}
+
 async function playersTurn() {
     if(currentEnemy !== null) {
         if(currentEnemy.alive) {              
@@ -175,12 +184,14 @@ async function playersTurn() {
                         if(players[x].itemTick >= 4) {
                             let itemChance = randomNumber(1,3);
                             if(itemChance == 2) {
-                                players[x].item = true;
-                                players[x].itemTick = 0;
+                                setItem(players[x], true);
                                 statusMesssage(`${players[x].name} found an !item`);
-                                itemIcon(players[x].playerId, true);
-                                itemFoundSound.play();
-                                await sleep(2);
+                                // players[x].item = true;
+                                // players[x].itemTick = 0;
+                                // statusMesssage(`${players[x].name} found an !item`);
+                                // itemIcon(players[x].playerId, true);
+                                // itemFoundSound.play();
+                                // await sleep(2);
                             }
                         }
                     }
@@ -267,9 +278,10 @@ async function updateHealth(updateObj, newHealth) {
             let teamAlive = false;
             statusMesssage(`${updateObj.name} died!`);
             updateObj.alive = false;
-            updateObj.itemTick = 0;
-            updateObj.item = false;
-            itemIcon(updateObj.playerId, false);
+            // updateObj.itemTick = 0;
+            // updateObj.item = false;
+            // itemIcon(updateObj.playerId, false);
+            setItem(updateObj, false);
             for(let x in players) {
                 if(players[x].alive) {
                     teamAlive = true;
@@ -452,7 +464,7 @@ async function processChat(channel, user, message, self) {
     }
     // if(message.toLowerCase() == '!deez') { // COMMENT OUT BEFORE COMMIT 
     //     if(testCommands) {
-    //         errorMessage('deez nuts!');
+    //         setItem(players[0], true);
     //     }
     // }
 }
