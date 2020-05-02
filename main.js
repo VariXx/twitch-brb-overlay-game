@@ -11,6 +11,8 @@ clientOptions = {
 
 let players = [];
 let killCounterImage = 'images/skull.png';
+let healImage = 'images/hearts.png';
+let boomImage = 'images/boom.png';
 
 class Character {
     constructor(name, health) {
@@ -137,6 +139,13 @@ function itemIcon(updateId, status) {
     else {
         itemIcon.style.visibility = 'hidden';
     }
+}
+
+function errorMessage(errorMsg) { 
+    let errorMessage = document.getElementsByClassName('errorMessage')[0];
+    errorMessage.style.visibility = 'visible';
+    let oldErrorMessage = errorMessage.innerHTML;
+    errorMessage.innerHTML = oldErrorMessage + errorMsg;
 }
 
 function increaseKillCounter() {
@@ -386,7 +395,7 @@ async function useItem(user) {
                     let healedEnemyClass = document.getElementsByClassName('bossBox')[0];
                     let healedEnemyImage = healedEnemyClass.querySelector('.boss');
                     let oldImage = healedEnemyImage.innerHTML;
-                    healedEnemyImage.innerHTML += '<img src="images/hearts.png">';
+                    healedEnemyImage.innerHTML += `<img src="${healImage}">`;
                     healSound.play();
                     await updateHealth(currentEnemy, (currentEnemy.health + 10));
                     statusMesssage(`${foundPlayer.name} healed ${currentEnemy.name} 10HP!`);
@@ -399,7 +408,7 @@ async function useItem(user) {
                             let healedPlayerClass = document.getElementsByClassName(`player${x}`)[0];
                             let healedPlayerImage = healedPlayerClass.querySelector('.playerImage');
                             let oldImage = healedPlayerImage.innerHTML;
-                            healedPlayerImage.innerHTML += '<img src="images/hearts.png">';
+                            healedPlayerImage.innerHTML += `<img src="${healImage}">`;
                             healSound.play();                            
                             if(!players[x].alive) {
                                 players[x].alive = true;
@@ -418,7 +427,7 @@ async function useItem(user) {
                 let healedEnemyClass = document.getElementsByClassName('bossBox')[0];
                 let healedEnemyImage = healedEnemyClass.querySelector('.boss');
                 let oldImage = healedEnemyImage.innerHTML;
-                healedEnemyImage.innerHTML += '<img src="images/boom.png">';                
+                healedEnemyImage.innerHTML += `<img src="${boomImage}">`;
                 itemAttackSound.play();
                 let itemAttackDamage = (5 + randomNumber(0,5));
                 statusMesssage(`${foundPlayer.name}'s item did ${itemAttackDamage} damage!`);
@@ -441,9 +450,9 @@ async function processChat(channel, user, message, self) {
     if(message.toLowerCase() == '!item') {
         await useItem(user);
     }
-    // if(message.toLowerCase() == '!deez') {
+    // if(message.toLowerCase() == '!deez') { // COMMENT OUT BEFORE COMMIT 
     //     if(testCommands) {
-    //         killCounter();
+    //         errorMessage('deez nuts!');
     //     }
     // }
 }

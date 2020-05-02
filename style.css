@@ -39,6 +39,15 @@ body{
     overflow:hidden;
 }
 
+.errorMessage
+{
+    font-size:20px;
+    font-weight: bold;
+    text-align: center;
+    color:red;
+    visibility: hidden;
+}
+
 .players
 {
     padding-left:4%;
