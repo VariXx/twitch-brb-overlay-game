@@ -11,12 +11,18 @@ clientOptions = {
 
 let players = [];
 
-class Player {
-    constructor(name, health, playerId) {
+class Character {
+    constructor(name, health) {
         this.name = name;
         this.health = health;
         this.active = true;
         this.alive = true;
+    }
+}
+
+class Player extends Character {
+    constructor(name, health, playerId) {
+        super(name, health);
         this.item = false;
         this.itemTick = 0;
         this.playerId = playerId;
@@ -24,16 +30,13 @@ class Player {
     }
 }
 
-class Enemy {
+class Enemy extends Character {
     constructor(name, image, health, minAttack, maxAttack) {
-        this.name = name;
+        super(name, health);
         this.image = image;
-        this.health = health;
         this.maxHealth = health;
         this.minAttack = minAttack;
         this.maxAttack = maxAttack;
-        this.active = true;
-        this.alive = true;
         this.healCount = 0;
         this.animation = anime({
             targets: '.boss',
@@ -139,7 +142,7 @@ async function playersTurn() {
         if(currentEnemy.alive) {              
             for(let x in players) {
                 if(players[x].alive && players[x].active) {
-                    let playerAttack = randomNumber(1,3);
+                    let playerAttack = randomNumber(1,3); 
                     players[x].animation.play();
                     statusMesssage(`${players[x].name} attacked for ${playerAttack} damage`);
                     playerHitSound.play();
@@ -165,9 +168,7 @@ async function playersTurn() {
     }
 }
 
-// async function bossTurn()
-async function enemyTurn()
-{
+async function enemyTurn() {
     if(currentEnemy !== null) {
         if(currentEnemy.alive) {          
             statusMesssage(`${currentEnemy.name} attacked!`);
@@ -330,7 +331,6 @@ async function addPlayer(user) {
             }
             await updateHealth(players[newPId], 100);
             statusMesssage(`${players[newPId].name} joined!`);
-            // console.log(`added ${players[newPId].name} health ${players[newPId].health} id ${players[newPId].playerId} image ${players[newPId].image}`);
             joinSound.play();
             players[newPId].animation = anime({
                 targets: `.players .player${newPId} .playerImage`,
@@ -429,6 +429,16 @@ async function processChat(channel, user, message, self) {
     if(message.toLowerCase() == '!item') {
         await useItem(user);
     }
+    // if(message.toLowerCase() == '!deez') {
+    //     if(testCommands) {
+    //         players[0].item = true;
+    //         players[0].itemTick = 0;
+    //         statusMesssage(`${players[0].name} found an !item`);
+    //         itemIcon(players[0].playerId, true);
+    //         itemFoundSound.play();
+    //         await sleep(2);        
+    //     }
+    // }
 }
 
 var client = new tmi.client(clientOptions);
