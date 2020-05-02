@@ -10,10 +10,6 @@ clientOptions = {
 };
 
 let players = [];
-let killCounterImage = 'images/skull.png';
-let healImage = 'images/hearts-2.png';
-let boomImage = 'images/boom.png';
-let treasureImage = 'images/treasure.png';
 
 class Character {
     constructor(name, health) {
@@ -59,12 +55,20 @@ let itemBarHTML = '<div class="playerItem"></div>';
 let gameInfo = {gameActive: false, enemiesKilled: true, bossSpawnCount: 0};
 let currentEnemy = null;
 
+// images
+let killCounterImage = 'images/skull.png';
+let healImage = 'images/hearts-2.png';
+let boomImage = 'images/boom.png';
+let treasureImage = 'images/treasure.png';
+
+// sounds
 let enemyHitSound = new Audio('sounds/bossHit.wav');
 let joinSound = new Audio('sounds/join.wav');
 let playerHitSound = new Audio('sounds/hit.wav');
 let healSound = new Audio('sounds/heal.wav');
 let itemFoundSound = new Audio('sounds/item.wav');
 let itemAttackSound = new Audio('sounds/boom.wav');
+let treasureSound = new Audio('sounds/treasure.wav');
 
 async function enemyBox(status) {
     let enemyBar = document.getElementsByClassName('bossBox')[0];
@@ -90,6 +94,7 @@ async function spawnEnemy() {
                 setItem(players[x], true);
             }
             statusMesssage('Everyone found a item!');
+            treasureSound.play();
             let enemyClass = document.getElementsByClassName('bossBox')[0];
             let enemyImage = enemyClass.querySelector('.boss');
             enemyImage.style.backgroundImage = `url('${treasureImage}')`;
@@ -187,7 +192,7 @@ async function playersTurn() {
         if(currentEnemy.alive) {              
             for(let x in players) {
                 if(players[x].alive && players[x].active) {
-                    let playerAttack = randomNumber(1,3);
+                    let playerAttack = randomNumber(1,3); 
                     players[x].animation.play();
                     statusMesssage(`${players[x].name} attacked for ${playerAttack} damage`);
                     playerHitSound.play();
