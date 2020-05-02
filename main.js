@@ -13,6 +13,7 @@ let players = [];
 let killCounterImage = 'images/skull.png';
 let healImage = 'images/hearts-2.png';
 let boomImage = 'images/boom.png';
+let treasureImage = 'images/treasure.png';
 
 class Character {
     constructor(name, health) {
@@ -55,7 +56,7 @@ class Enemy extends Character {
 let healthBarHTML = '<div class="playerImage"></div><div class="progress"><div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>';
 let itemBarHTML = '<div class="playerItem"></div>';
 
-let gameInfo = {gameActive: false, enemiesKilled: true};
+let gameInfo = {gameActive: false, enemiesKilled: true, bossSpawnCount: 0};
 let currentEnemy = null;
 
 let enemyHitSound = new Audio('sounds/bossHit.wav');
@@ -78,12 +79,24 @@ async function enemyBox(status) {
 async function spawnEnemy() {
     currentEnemy = null;
     let randomEnemy = enemies.regular[randomNumber(0,(enemies.regular.length - 1))];
-    if(gameInfo.enemiesKilled >= 5) { 
+    if(gameInfo.bossSpawnCount >= 5) { 
         let bossChance = randomNumber(1,5);
         if(bossChance >= 4) {
             randomEnemy = enemies.bosses[randomNumber(0,(enemies.bosses.length - 1))];
+            gameInfo.bossSpawnCount = 0;
         }
-        // TO DO - give item chest if bossChance is 2
+        if(bossChance == 2) { 
+            for(let x in players) { 
+                setItem(players[x], true);
+            }
+            statusMesssage('Everyone found a item!');
+            let enemyClass = document.getElementsByClassName('bossBox')[0];
+            let enemyImage = enemyClass.querySelector('.boss');
+            enemyImage.style.backgroundImage = `url('${treasureImage}')`;
+            await enemyBox(true);         
+            await sleep(1);
+            await enemyBox(false);
+        }
     }
     currentEnemy = new Enemy(randomEnemy.name, randomEnemy.image, randomEnemy.health, randomEnemy.minAttack, randomEnemy.maxAttack);
     currentEnemy.active = true;
@@ -157,6 +170,7 @@ function increaseKillCounter() {
         winElement.style.visibility = 'visible';
     }
     gameInfo.enemiesKilled++;
+    gameInfo.bossSpawnCount++;
 }
 
 function setItem(updateObj, status) { 
@@ -186,12 +200,6 @@ async function playersTurn() {
                             if(itemChance == 2) {
                                 setItem(players[x], true);
                                 statusMesssage(`${players[x].name} found an !item`);
-                                // players[x].item = true;
-                                // players[x].itemTick = 0;
-                                // statusMesssage(`${players[x].name} found an !item`);
-                                // itemIcon(players[x].playerId, true);
-                                // itemFoundSound.play();
-                                // await sleep(2);
                             }
                         }
                     }
@@ -278,9 +286,6 @@ async function updateHealth(updateObj, newHealth) {
             let teamAlive = false;
             statusMesssage(`${updateObj.name} died!`);
             updateObj.alive = false;
-            // updateObj.itemTick = 0;
-            // updateObj.item = false;
-            // itemIcon(updateObj.playerId, false);
             setItem(updateObj, false);
             for(let x in players) {
                 if(players[x].alive) {
