@@ -10,6 +10,7 @@ clientOptions = {
 };
 
 let players = [];
+let killCounterImage = 'images/skull.png';
 
 class Character {
     constructor(name, health) {
@@ -80,6 +81,7 @@ async function spawnEnemy() {
         if(bossChance >= 4) {
             randomEnemy = enemies.bosses[randomNumber(0,(enemies.bosses.length - 1))];
         }
+        // TO DO - give item chest if bossChance is 2
     }
     currentEnemy = new Enemy(randomEnemy.name, randomEnemy.image, randomEnemy.health, randomEnemy.minAttack, randomEnemy.maxAttack);
     currentEnemy.active = true;
@@ -137,12 +139,23 @@ function itemIcon(updateId, status) {
     }
 }
 
+function increaseKillCounter() {
+    let winElement = document.getElementsByClassName('killCounter')[0]; // TO DO - create function for changing HTML
+    winElement.style.visibility = 'visible';
+    let oldWinElement = winElement.innerHTML;
+    winElement.innerHTML = oldWinElement + `<img src="${killCounterImage}">`;
+    if(gameInfo.enemiesKilled == 0) {
+        winElement.style.visibility = 'visible';
+    }
+    gameInfo.enemiesKilled++;
+}
+
 async function playersTurn() {
     if(currentEnemy !== null) {
         if(currentEnemy.alive) {              
             for(let x in players) {
                 if(players[x].alive && players[x].active) {
-                    let playerAttack = randomNumber(1,3); 
+                    let playerAttack = randomNumber(1,3);
                     players[x].animation.play();
                     statusMesssage(`${players[x].name} attacked for ${playerAttack} damage`);
                     playerHitSound.play();
@@ -269,10 +282,9 @@ async function updateHealth(updateObj, newHealth) {
             statusMesssage(`${updateObj.name} has been defeated!`);
             await sleep(1);
             await enemyBox(false);
-            gameInfo.enemiesKilled++;
-            spawnEnemy(); 
-            // dont wait otherwise you'll have to wait for updateHealth() for new enemy 
-            // TO DO - move this to runTurn() spawn an enemy if there isn't one active/alive and the game is active
+            increaseKillCounter();
+            spawnEnemy(); // dont await otherwise you'll have to wait for updateHealth() for new enemy 
+            // TO DO - move this to the end of the turn after fixing timing 
         }
     }
     if(healthBar != null) {
@@ -431,12 +443,7 @@ async function processChat(channel, user, message, self) {
     }
     // if(message.toLowerCase() == '!deez') {
     //     if(testCommands) {
-    //         players[0].item = true;
-    //         players[0].itemTick = 0;
-    //         statusMesssage(`${players[0].name} found an !item`);
-    //         itemIcon(players[0].playerId, true);
-    //         itemFoundSound.play();
-    //         await sleep(2);        
+    //         killCounter();
     //     }
     // }
 }

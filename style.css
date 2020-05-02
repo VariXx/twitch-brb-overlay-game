@@ -1,6 +1,6 @@
 body{
     overflow: hidden;
-    background-image: url('back-test.jpg');
+    /* background-image: url('back-test.jpg'); */
     background-position:center;
 }
 
@@ -26,6 +26,17 @@ body{
     text-align: center;
     color:white;
     overflow: hidden;
+}
+
+.winCounter
+{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color:white;
+    visibility: hidden;
+    height: 40px;
+    overflow:hidden;
 }
 
 .players
