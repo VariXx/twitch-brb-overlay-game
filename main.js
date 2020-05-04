@@ -57,7 +57,7 @@ let currentEnemy = null;
 
 // images
 let killCounterImage = 'images/skull.png';
-let healImage = 'images/hearts-2.png';
+let healImage = 'images/hearts.png';
 let boomImage = 'images/boom.png';
 let treasureImage = 'images/treasure.png';
 
