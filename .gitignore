@@ -1,6 +1,7 @@
 .vscode/
 node_modules/
 *.lnk
+*.db
 web/images/
 !web/images/boom.png
 !web/images/chest.png
