@@ -4,7 +4,7 @@
   "description": "[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/varixx/twitch-brb-overlay-game?sort=semver)](https://github.com/VariXx/twitch-brb-overlay-game/releases) [![GitHub last commit](https://img.shields.io/github/last-commit/varixx/twitch-brb-overlay-game)](https://github.com/VariXx/twitch-brb-overlay-game/commits/master) [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/varixx/twitch-brb-overlay-game/develop?label=last%20commit%20%28develop%29)](https://github.com/VariXx/twitch-brb-overlay-game/commits/develop) [![Discord](https://img.shields.io/discord/90687557523771392?color=000000&label=%20&logo=discord)](https://discord.gg/QNppY7T) [![Twitch Status](https://img.shields.io/twitch/status/varixx?label=%20&logo=twitch)](https://twitch.tv/VariXx)",
   "main": "server/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/main.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/VariXx/twitch-brb-overlay-game#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1"
   }
 }
