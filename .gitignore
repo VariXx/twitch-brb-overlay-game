@@ -1,3 +1,5 @@
+.vscode/
+node_modules/
 *.lnk
 web/images/
 !web/images/boom.png
